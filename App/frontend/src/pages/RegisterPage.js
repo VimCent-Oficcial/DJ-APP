@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(register(nombre, email, password, tipo_usuario))
-      .then(() => navigate('/profile'))
+      .then(() => navigate('/')) // Redirige al inicio después del registro
       .catch((error) => console.error(error));
   };
 

@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(email, password))
-      .then(() => navigate('/profile'))
+      .then(() => navigate('/')) // Redirige al inicio después del login
       .catch((error) => console.error(error));
   };
 

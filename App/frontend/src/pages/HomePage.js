@@ -1,9 +1,12 @@
-// src/pages/LoginPage.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import api from '../services/api';
 
 const HomePage = () => {
   const [djs, setDJs] = useState([]);
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchDJs = async () => {
@@ -18,13 +21,25 @@ const HomePage = () => {
     fetchDJs();
   }, []);
 
+  const handleAccountClick = () => {
+    if (user) {
+      navigate('/profile'); // Redirige al perfil si está logueado
+    } else {
+      navigate('/login'); // Redirige al login si no está logueado
+    }
+  };
+
   return (
     <div>
-      <h1>DJs Destacados</h1>
+      <h1>Bienvenido a Pandifymx</h1>
+      <button onClick={handleAccountClick}>Cuenta</button>
+      {user && <p>¡Hola, {user.nombre}!</p>}
+      
+      <h2>DJs Destacados</h2>
       <div>
         {djs.map((dj) => (
           <div key={dj.id}>
-            <h2>{dj.nombre}</h2>
+            <h3>{dj.nombre}</h3>
             <p>{dj.descripcion}</p>
             <img src={dj.foto_perfil} alt={dj.nombre} />
           </div>

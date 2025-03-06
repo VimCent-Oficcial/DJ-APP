@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile, updateProfile, verifyDJ } from '../actions/profileActions';
+import { logout } from '../actions/authActions';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
@@ -30,6 +31,11 @@ const ProfilePage = () => {
     dispatch(updateProfile({ nombre, descripcion, telefono, direccion, foto_perfil }));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
+
   return (
     <div>
       <h1>Perfil</h1>
@@ -46,6 +52,7 @@ const ProfilePage = () => {
           {user.verificado ? 'Verificado' : 'Verificar DJ'}
         </button>
       )}
+      <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
 };
