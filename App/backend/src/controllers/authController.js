@@ -11,6 +11,11 @@ const authController = {
     try {
       const { nombre, email, contrasena, tipo_usuario } = req.body;
 
+      // Validación básica
+      if (!nombre || !email || !contrasena || !tipo_usuario) {
+        return res.status(400).json({ message: 'Todos los campos son requeridos' });
+      }
+
       // Verificar si el usuario ya existe
       const usuarioExistente = await Usuario.findOne({ where: { email } });
       if (usuarioExistente) {
@@ -28,9 +33,11 @@ const authController = {
         tipo_usuario,
       });
 
-      res.status(201).json({ message: 'Usuario registrado', usuario: nuevoUsuario });
+      // Devolver respuesta sin información sensible
+      res.status(201).json({ message: 'Usuario registrado', usuario: { id: nuevoUsuario.id, email: nuevoUsuario.email } });
     } catch (error) {
-      res.status(500).json({ message: 'Error en el servidor', error: error.message });
+      console.error('Error en el registro:', error);
+      res.status(500).json({ message: 'Error en el servidor' });
     }
   },
 
@@ -38,6 +45,11 @@ const authController = {
   login: async (req, res) => {
     try {
       const { email, contrasena } = req.body;
+
+      // Validación básica
+      if (!email || !contrasena) {
+        return res.status(400).json({ message: 'Email y contraseña son requeridos' });
+      }
 
       // Verificar si el usuario existe
       const usuario = await Usuario.findOne({ where: { email } });
@@ -56,9 +68,11 @@ const authController = {
         expiresIn: '1h', // El token expira en 1 hora
       });
 
+      // Devolver respuesta sin información sensible
       res.status(200).json({ message: 'Login exitoso', token });
     } catch (error) {
-      res.status(500).json({ message: 'Error en el servidor', error: error.message });
+      console.error('Error en el login:', error);
+      res.status(500).json({ message: 'Error en el servidor' });
     }
   },
 };

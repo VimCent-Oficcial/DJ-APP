@@ -1,7 +1,7 @@
-// RegisterPage.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../actions/authActions';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [nombre, setNombre] = useState('');
@@ -9,10 +9,13 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [tipo_usuario, setTipoUsuario] = useState('Cliente');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(register(nombre, email, password, tipo_usuario));
+    dispatch(register(nombre, email, password, tipo_usuario))
+      .then(() => navigate('/profile'))
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -28,6 +31,7 @@ const RegisterPage = () => {
         </select>
         <button type="submit">Registrarse</button>
       </form>
+      <button onClick={() => navigate('/login')}>¿Ya tienes cuenta? Inicia Sesión</button>
     </div>
   );
 };

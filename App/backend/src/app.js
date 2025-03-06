@@ -18,4 +18,13 @@ app.get('/', (req, res) => {
   res.send('¡Backend funcionando!');
 });
 
+const uploadRoutes = require('./routes/uploadRoutes');
+app.use('/api/upload', uploadRoutes);
+
+const djRoutes = require('./routes/djRoutes');
+app.use('/api/djs', djRoutes);
+
+const profileRoutes = require('./routes/profileRoutes');
+app.use('/api/profile', profileRoutes);
+
 module.exports = app;
