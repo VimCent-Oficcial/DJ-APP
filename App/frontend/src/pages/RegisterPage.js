@@ -11,11 +11,14 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(register(nombre, email, password, tipo_usuario))
-      .then(() => navigate('/')) // Redirige al inicio después del registro
-      .catch((error) => console.error(error));
+    try {
+      await dispatch(register(nombre, email, password, tipo_usuario));
+      navigate('/'); // Redirige al inicio después del registro
+    } catch (error) {
+      console.error('Error en el registro:', error);
+    }
   };
 
   return (

@@ -23,9 +23,9 @@ const HomePage = () => {
 
   const handleAccountClick = () => {
     if (user) {
-      navigate('/profile'); // Redirige al perfil si está logueado
+      navigate('/profile');
     } else {
-      navigate('/login'); // Redirige al login si no está logueado
+      navigate('/login');
     }
   };
 

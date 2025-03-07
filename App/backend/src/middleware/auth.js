@@ -11,11 +11,14 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
     req.user = decoded; // Agrega el usuario decodificado a la solicitud
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Token inválido' });
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expirado. Por favor, inicia sesión nuevamente.' });
+    }
+    res.status(401).json({ message: 'Token inválido' });
   }
 };
 

@@ -4,10 +4,17 @@ export const login = (email, password) => async (dispatch) => {
   dispatch({ type: 'LOGIN_REQUEST' });
   try {
     const response = await api.post('/api/auth/login', { email, password });
-    localStorage.setItem('token', response.data.token); // Guardar el token en el localStorage
+
+    // Guardar el token y el usuario en localStorage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+
     dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
   } catch (error) {
-    dispatch({ type: 'LOGIN_FAILURE', payload: error.response.data.message });
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    dispatch({ type: 'LOGIN_FAILURE', payload: error.response?.data?.message || 'Error en el login' });
+    throw error;
   }
 };
 
@@ -15,14 +22,22 @@ export const register = (nombre, email, password, tipo_usuario) => async (dispat
   dispatch({ type: 'REGISTER_REQUEST' });
   try {
     const response = await api.post('/api/auth/register', { nombre, email, contrasena: password, tipo_usuario });
-    localStorage.setItem('token', response.data.token); // Guardar el token en el localStorage
+
+    // Guardar el token y el usuario en localStorage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+
     dispatch({ type: 'REGISTER_SUCCESS', payload: response.data });
   } catch (error) {
-    dispatch({ type: 'REGISTER_FAILURE', payload: error.response.data.message });
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    dispatch({ type: 'REGISTER_FAILURE', payload: error.response?.data?.message || 'Error en el registro' });
+    throw error;
   }
 };
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('token'); // Eliminar el token del localStorage
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
   dispatch({ type: 'LOGOUT' });
 };

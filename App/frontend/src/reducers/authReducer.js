@@ -1,6 +1,11 @@
+const getUserFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+
 const initialState = {
-  user: null,
-  token: null,
+  user: getUserFromLocalStorage(),
+  token: localStorage.getItem('token') || null,
   loading: false,
   error: null,
 };
@@ -12,14 +17,12 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loading: true, error: null };
     case 'LOGIN_SUCCESS':
     case 'REGISTER_SUCCESS':
-      return { ...state, loading: false, user: action.payload.user, token: action.payload.token };
+      return { ...state, loading: false, user: action.payload.user, token: action.payload.token, error: null };
     case 'LOGIN_FAILURE':
     case 'REGISTER_FAILURE':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, user: null, token: null, error: action.payload };
     case 'LOGOUT':
-      return { ...state, user: null, token: null };
-    case 'UPDATE_PROFILE':
-      return { ...state, user: action.payload };
+      return { ...state, user: null, token: null, loading: false, error: null };
     default:
       return state;
   }

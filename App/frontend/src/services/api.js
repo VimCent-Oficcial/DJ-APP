@@ -1,19 +1,18 @@
-// src/services/api.js
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/', // Reemplaza con la URL de tu backend
+  baseURL: 'http://localhost:5000', // URL del backend
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptores para manejar errores globales o añadir tokens de autenticación
+// Interceptor para agregar el token a las solicitudes
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`; // Agrega el token al encabezado
     }
     return config;
   },
@@ -22,13 +21,16 @@ api.interceptors.request.use(
   }
 );
 
+// Interceptor para manejar errores de autenticación
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Manejar el error de autenticación (por ejemplo, redirigir al login)
+      localStorage.removeItem('token'); // Elimina el token inválido
+      localStorage.removeItem('user'); // Elimina el usuario
+      window.location.href = '/login'; // Redirige al login
     }
     return Promise.reject(error);
   }

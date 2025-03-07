@@ -13,22 +13,30 @@ const ProfilePage = () => {
   const [telefono, setTelefono] = useState('');
   const [direccion, setDireccion] = useState('');
   const [foto_perfil, setFotoPerfil] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
+    if (user) {
+      setNombre(user.nombre || '');
+      setDescripcion(user.descripcion || '');
+      setTelefono(user.telefono || '');
+      setDireccion(user.direccion || '');
+      setFotoPerfil(user.foto_perfil || '');
     } else {
-      setNombre(user.nombre);
-      setDescripcion(user.descripcion);
-      setTelefono(user.telefono);
-      setDireccion(user.direccion);
-      setFotoPerfil(user.foto_perfil);
+      navigate('/login');
     }
   }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateProfile({ nombre, descripcion, telefono, direccion, foto_perfil }));
+    if (!nombre && !descripcion && !telefono && !direccion && !foto_perfil) {
+      setError('Debes proporcionar al menos un campo para actualizar');
+      return;
+    }
+    dispatch(updateProfile({ nombre, descripcion, telefono, direccion, foto_perfil }))
+      .unwrap()
+      .then(() => setError(''))
+      .catch((error) => setError(error.message || 'Error actualizando el perfil'));
   };
 
   const handleLogout = () => {
@@ -39,6 +47,7 @@ const ProfilePage = () => {
   return (
     <div>
       <h1>Perfil</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
         <textarea placeholder="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
