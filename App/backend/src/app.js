@@ -11,7 +11,10 @@ dotenv.config();
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // URL del frontend
+  credentials: true,
+}));
 app.use(express.json());
 
 // Rutas

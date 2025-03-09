@@ -12,7 +12,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Agrega el token al encabezado
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -28,9 +28,9 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token'); // Elimina el token inválido
-      localStorage.removeItem('user'); // Elimina el usuario
-      window.location.href = '/login'; // Redirige al login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

@@ -1,9 +1,9 @@
 import api from '../services/api';
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, contrasena) => async (dispatch) => {
   dispatch({ type: 'LOGIN_REQUEST' });
   try {
-    const response = await api.post('/api/auth/login', { email, password });
+    const response = await api.post('/api/auth/login', { email, contrasena });
 
     // Guardar el token y el usuario en localStorage
     localStorage.setItem('token', response.data.token);

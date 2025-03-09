@@ -3,7 +3,7 @@ const Usuario = require('../models/Usuario');
 const profileController = {
   getProfile: async (req, res) => {
     try {
-      const usuario = await Usuario.findByPk(req.user.id); // req.user.id viene del middleware de autenticación
+      const usuario = await Usuario.findByPk(req.user.id);
       if (!usuario) {
         return res.status(404).json({ message: 'Usuario no encontrado' });
       }
@@ -22,7 +22,6 @@ const profileController = {
         return res.status(404).json({ message: 'Usuario no encontrado' });
       }
 
-      // Actualizar campos
       usuario.nombre = nombre || usuario.nombre;
       usuario.descripcion = descripcion || usuario.descripcion;
       usuario.telefono = telefono || usuario.telefono;
